@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UniGLTF;
 using UnityEngine;
 using System.IO;
+using Object = UnityEngine.Object;
 
 
 namespace VRM
@@ -13,8 +14,15 @@ namespace VRM
         const string HUMANOID_KEY = "humanoid";
         const string MATERIAL_KEY = "materialProperties";
 
+        private readonly BlendShapeClip _emptyBlendShapeClip;
+        private readonly BlendShapeAvatar _emptyBlendShapeAvatar;
+        private readonly VRMMetaObject _emptyVRMMetaObject;
+
         public VRMImporterContext()
         {
+            _emptyBlendShapeClip = ScriptableObject.CreateInstance<BlendShapeClip>();
+            _emptyBlendShapeAvatar = ScriptableObject.CreateInstance<BlendShapeAvatar>();
+            _emptyVRMMetaObject = ScriptableObject.CreateInstance<VRMMetaObject>();
         }
 
         public override void Parse(string path, byte[] bytes)
@@ -112,7 +120,7 @@ namespace VRM
 
         void LoadBlendShapeMaster()
         {
-            BlendShapeAvatar = ScriptableObject.CreateInstance<BlendShapeAvatar>();
+            BlendShapeAvatar = Object.Instantiate(_emptyBlendShapeAvatar);
             BlendShapeAvatar.name = "BlendShape";
 
             var transformMeshTable = new Dictionary<Mesh, Transform>();
@@ -140,7 +148,7 @@ namespace VRM
 
         BlendShapeClip LoadBlendShapeBind(glTF_VRM_BlendShapeGroup group, Dictionary<Mesh, Transform> transformMeshTable)
         {
-            var asset = ScriptableObject.CreateInstance<BlendShapeClip>();
+            var asset = Object.Instantiate(_emptyBlendShapeClip);
             var groupName = group.name;
             var prefix = "BlendShape.";
             while (groupName.StartsWith(prefix))
@@ -279,7 +287,7 @@ namespace VRM
 
         public VRMMetaObject ReadMeta(bool createThumbnail = false)
         {
-            var meta = ScriptableObject.CreateInstance<VRMMetaObject>();
+            var meta = Object.Instantiate(_emptyVRMMetaObject);
             meta.name = "Meta";
             meta.ExporterVersion = GLTF.extensions.VRM.exporterVersion;
 

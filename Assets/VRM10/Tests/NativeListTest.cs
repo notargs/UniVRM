@@ -5,10 +5,10 @@ using UniVRM10.FastSpringBones.Utilities;
 
 namespace UniVRM10
 {
-    public class SpringBoneTest
+    public class NativeListTest
     {
         [Test]
-        public void NativeListTest()
+        public void SpringBoneTest()
         {
             var nativeList = new NativeList<int>(3, Allocator.Persistent);
 
@@ -32,6 +32,7 @@ namespace UniVRM10
             nativeList[1] = 100;
             Assert.That(() => nativeList[-1] = 100, Throws.TypeOf<IndexOutOfRangeException>());
             Assert.That(() => nativeList[5] = 100, Throws.TypeOf<IndexOutOfRangeException>());
+            Assert.That(nativeList[1], Is.EqualTo(100));
 
             Assert.That(nativeList, Is.EqualTo(new[] {0, 100, 2, 5, 6}));
             Assert.That(nativeList.GetNativeSlice(), Is.EqualTo(new[] {0, 100, 2, 5, 6}));

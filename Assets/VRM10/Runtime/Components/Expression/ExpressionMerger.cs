@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using VrmLib;
+using UnityEngine.Profiling;
 
 
 namespace UniVRM10
@@ -42,6 +42,7 @@ namespace UniVRM10
         /// <param name="expressionWeights"></param>
         public void SetValues(Dictionary<ExpressionKey, float> expressionWeights)
         {
+            Profiler.BeginSample("LookAtEyeDirectionApplicableToBone.Apply");
             foreach (var (key, weight) in expressionWeights)
             {
                 AccumulateValue(key, weight);
@@ -49,6 +50,7 @@ namespace UniVRM10
 
             m_morphTargetBindingMerger.Apply();
             m_materialValueBindingMerger.Apply();
+            Profiler.EndSample();
         }
 
         private void AccumulateValue(ExpressionKey key, float value)

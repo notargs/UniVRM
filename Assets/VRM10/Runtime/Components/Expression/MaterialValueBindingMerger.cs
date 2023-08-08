@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UniGLTF.Extensions.VRMC_vrm;
 using UnityEngine;
+using UnityEngine.Profiling;
 using VRMShaders.VRM10.MToon10.Runtime;
 
 namespace UniVRM10
@@ -257,6 +258,7 @@ namespace UniVRM10
         HashSet<MaterialTarget> m_used = new HashSet<MaterialTarget>();
         public void Apply()
         {
+            Profiler.BeginSample("MaterialValueBindingMerger.Apply");
             {
                 m_used.Clear();
                 foreach (var kv in m_materialColorMap)
@@ -310,6 +312,7 @@ namespace UniVRM10
                 }
                 m_materialUVMap.Clear();
             }
+            Profiler.EndSample();
         }
         #endregion
 

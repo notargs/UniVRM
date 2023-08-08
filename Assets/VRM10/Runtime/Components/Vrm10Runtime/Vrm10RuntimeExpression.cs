@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.Profiling;
 
 namespace UniVRM10
 {
@@ -106,6 +107,7 @@ namespace UniVRM10
         /// </summary>
         private void Apply()
         {
+            Profiler.BeginSample("Vrm10RuntimeExpression.Apply");
             // 1. Get eye direction from provider.
             _inputEyeDirection = _eyeDirectionProvider?.EyeDirection ?? default;
 
@@ -123,6 +125,7 @@ namespace UniVRM10
             BlinkOverrideRate = blink;
             LookAtOverrideRate = lookAt;
             MouthOverrideRate = mouth;
+            Profiler.EndSample();
         }
     }
 }

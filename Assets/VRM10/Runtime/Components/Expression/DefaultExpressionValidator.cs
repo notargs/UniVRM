@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UniGLTF.Extensions.VRMC_vrm;
 using UnityEngine;
-using VrmLib;
+using UnityEngine.Profiling;
 
 namespace UniVRM10
 {
@@ -22,6 +22,7 @@ namespace UniVRM10
             LookAtEyeDirection inputEyeDirection, out LookAtEyeDirection actualEyeDirection,
             out float blinkOverrideRate, out float lookAtOverrideRate, out float mouthOverrideRate)
         {
+            Profiler.BeginSample("DefaultExpressionValidator.Validate");
             // override rate
             blinkOverrideRate = 0f;
             lookAtOverrideRate = 0f;
@@ -83,6 +84,7 @@ namespace UniVRM10
 
             // 4. eye direction
             actualEyeDirection = LookAtEyeDirection.Multiply(inputEyeDirection, 1f - lookAtOverrideRate);
+            Profiler.EndSample();
         }
 
         private float GetOverrideRate(ExpressionOverrideType type, float weight)

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 namespace UniVRM10
 {
@@ -101,6 +102,7 @@ namespace UniVRM10
 
         public void Apply()
         {
+            Profiler.BeginSample("MorphTargetBindingMerger.Apply");
             foreach (var kv in m_morphTargetValueMap)
             {
                 Action<float> setter;
@@ -110,6 +112,7 @@ namespace UniVRM10
                 }
             }
             m_morphTargetValueMap.Clear();
+            Profiler.EndSample();
         }
     }
 }

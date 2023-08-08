@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 namespace UniVRM10
 {
@@ -34,6 +35,7 @@ namespace UniVRM10
         /// </summary>
         public void Apply(LookAtEyeDirection eyeDirection, Dictionary<ExpressionKey, float> actualWeights)
         {
+            Profiler.BeginSample("LookAtEyeDirectionApplicableToBone.Apply");
             // FIXME
             var yaw = eyeDirection.LeftYaw;
             var pitch = eyeDirection.LeftPitch;
@@ -63,6 +65,7 @@ namespace UniVRM10
 
             // Apply
             SetYawPitchToBones(new LookAtEyeDirection(leftYaw, pitch, rightYaw, pitch));
+            Profiler.EndSample();
         }
 
         public void Restore()

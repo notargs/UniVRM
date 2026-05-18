@@ -18,7 +18,7 @@ namespace UniGLTF.SpringBoneJobs
                 case AnglelimitTypes.Cone:
                     {
                         var angleSpaceToWorld = anglelimitSpaceToWorld(logic, joint, parentRotation);
-                        var tailDir = math.mul(math.inverse(angleSpaceToWorld), math.normalize(nextTail - head));
+                        var tailDir = math.mul(math.inverse(angleSpaceToWorld), math.normalizesafe(nextTail - head));
                         tailDir = AnglelimitCone.Apply(tailDir, joint.anglelimit1);
                         return head + math.mul(angleSpaceToWorld, tailDir) * logic.length;
                     }
@@ -26,7 +26,7 @@ namespace UniGLTF.SpringBoneJobs
                 case AnglelimitTypes.Hinge:
                     {
                         var angleSpaceToWorld = anglelimitSpaceToWorld(logic, joint, parentRotation);
-                        var tailDir = math.mul(math.inverse(angleSpaceToWorld), math.normalize(nextTail - head));
+                        var tailDir = math.mul(math.inverse(angleSpaceToWorld), math.normalizesafe(nextTail - head));
                         tailDir = AnglelimitHinge.Apply(tailDir, joint.anglelimit1);
                         return head + math.mul(angleSpaceToWorld, tailDir) * logic.length;
                     }
@@ -35,7 +35,7 @@ namespace UniGLTF.SpringBoneJobs
                 case AnglelimitTypes.Spherical:
                     {
                         var angleSpaceToWorld = anglelimitSpaceToWorld(logic, joint, parentRotation);
-                        var tailDir = math.mul(math.inverse(angleSpaceToWorld), math.normalize(nextTail - head));
+                        var tailDir = math.mul(math.inverse(angleSpaceToWorld), math.normalizesafe(nextTail - head));
                         tailDir = AnglelimitSpherical.Apply(tailDir, joint.anglelimit1, joint.anglelimit2);
                         return head + math.mul(angleSpaceToWorld, tailDir) * logic.length;
                     }
@@ -66,8 +66,8 @@ namespace UniGLTF.SpringBoneJobs
         // https://discussions.unity.com/t/unity-mathematics-equivalent-to-quaternion-fromtorotation/237459
         public static quaternion fromToQuaternion(in float3 from, in float3 to)
         {
-            var fromNorm = math.normalize(from);
-            var toNorm = math.normalize(to);
+            var fromNorm = math.normalizesafe(from);
+            var toNorm = math.normalizesafe(to);
             var dot = math.dot(fromNorm, toNorm);
 
             // Handle the case where from and to are parallel but opposite
@@ -77,13 +77,13 @@ namespace UniGLTF.SpringBoneJobs
                 var perpAxis = math.abs(fromNorm.x) > math.abs(fromNorm.z)
                     ? new float3(-fromNorm.y, fromNorm.x, 0f)
                     : new float3(0f, -fromNorm.z, fromNorm.y);
-                return quaternion.AxisAngle(math.normalize(perpAxis), math.PI);
+                return quaternion.AxisAngle(math.normalizesafe(perpAxis), math.PI);
             }
 
             // General case
             return quaternion.AxisAngle(
                   angle: math.acos(math.clamp(dot, -1f, 1f)),
-                  axis: math.normalize(math.cross(fromNorm, toNorm))
+                  axis: math.normalizesafe(math.cross(fromNorm, toNorm))
                 );
         }
 
